@@ -18,12 +18,11 @@ public class Libro {
     private String titulo ;
     @Enumerated(EnumType.STRING)
     @JsonAlias("languages")
-    private Idioma idioma ;
+    private String idioma ;
     @JsonAlias("download_count")
     private Integer cantidadDescargas;
-    @ManyToOne(mappedBy = "autor" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
-    @JsonAlias("authors")
-    private List<Autor> autor ;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Autor autor ;
 
 
 

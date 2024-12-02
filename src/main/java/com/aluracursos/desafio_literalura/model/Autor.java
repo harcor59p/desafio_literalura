@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Autores")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -18,8 +20,8 @@ public class Autor {
     private Integer anioNacimiento ;
     @JsonAlias("death_year")
     private Integer anioFallecimiento ;
-    @OneToMany(mappedBy = "autores" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
-    private Libro libro ;
+    @OneToMany(mappedBy = "autor" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    private List<Libro> libro ;
 
 
 
