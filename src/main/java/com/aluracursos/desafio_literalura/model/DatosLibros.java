@@ -3,10 +3,16 @@ package com.aluracursos.desafio_literalura.model;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record DatosLibros(
-        @JsonAlias("results") List<Libro> libros
+        @JsonAlias("title")
+        String titulo ,
+        @JsonAlias("languages")
+        String idioma ,
+        @JsonAlias("download_count")
+        Integer cantidadDescargas,
+
+        Autor autor
 ) {
 }
