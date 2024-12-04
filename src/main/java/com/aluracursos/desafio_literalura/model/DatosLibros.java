@@ -11,8 +11,8 @@ public record DatosLibros(
         @JsonAlias("languages")
         String idioma ,
         @JsonAlias("download_count")
-        Integer cantidadDescargas,
+        Integer cantidadDescargas
 
-        Autor autor
+
 ) {
 }
