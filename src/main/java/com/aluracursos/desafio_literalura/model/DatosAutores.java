@@ -7,6 +7,12 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record DatosAutores(
-        @JsonAlias("authors") List<Autor> autores
+        @JsonAlias("title")
+        String autor ,
+        @JsonAlias("birth_year")
+        Integer anioNacimiento ,
+        @JsonAlias("death_year")
+        Integer anioFallecimiento
+
 ) {
 }

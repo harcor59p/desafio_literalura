@@ -1,8 +1,10 @@
 package com.aluracursos.desafio_literalura.model;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 
 import java.util.List;
 
@@ -14,15 +16,59 @@ public class Autor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
     @Column(unique = true)
-    @JsonAlias("title")
     private String autor ;
-    @JsonAlias("birth_year")
     private Integer anioNacimiento ;
-    @JsonAlias("death_year")
     private Integer anioFallecimiento ;
-    @OneToMany(mappedBy = "autor" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
-    private List<Libro> libro ;
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Libro> libros = new ArrayList<>();
 
 
+    public Autor(){}
 
+    public Autor(DatosAutores datosAutores) {
+        //this.id = autorRecord.id();
+        this.autor = datosAutores.autor();
+        this.anioNacimiento = datosAutores.anioNacimiento();
+        this.anioFallecimiento = datosAutores.anioFallecimiento();
+    }
+
+    public List<Libro> getLibros() {
+        return libros;
+    }
+
+    public void setLibros(List<Libro> libros) {
+        this.libros = libros;
+    }
+
+    public Integer getAnioFallecimiento() {
+        return anioFallecimiento;
+    }
+
+    public void setAnioFallecimiento(Integer anioFallecimiento) {
+        this.anioFallecimiento = anioFallecimiento;
+    }
+
+    public Integer getAnioNacimiento() {
+        return anioNacimiento;
+    }
+
+    public void setAnioNacimiento(Integer anioNacimiento) {
+        this.anioNacimiento = anioNacimiento;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
