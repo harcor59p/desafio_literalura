@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ConvertirDatos {
     private ObjectMapper objectMapper = new ObjectMapper();
-    @Override
+    //@Override
     public <T> T obtenerDatos(String json, Class<T> clase) {
         try{
             return objectMapper.readValue(json, clase);

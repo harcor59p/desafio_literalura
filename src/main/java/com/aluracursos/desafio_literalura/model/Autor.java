@@ -71,4 +71,15 @@ public class Autor {
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Autor{" +
+                "id=" + id +
+                ", autor='" + autor + '\'' +
+                ", anioNacimiento=" + anioNacimiento +
+                ", anioFallecimiento=" + anioFallecimiento +
+                ", libros=" + libros +
+                '}';
+    }
 }
