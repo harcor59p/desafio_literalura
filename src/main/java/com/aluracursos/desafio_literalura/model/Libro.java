@@ -18,13 +18,13 @@ public class Libro {
     @JoinColumn( name = "autor_id", nullable = false)
     private Autor autor;
     @Enumerated(EnumType.STRING)
-    private Lenguaje lenguaje;
-    private Long cantidadDescargas;
+    private String idiomas;
+    private Integer cantidadDescargas;
 
     public Libro(DatosLibros datosLibros) {
         this.titulo = datosLibros.titulo();
-        this.lenguaje = datosLibros.lenguaje().isEmpty() ? null : Lenguaje.desdeCodigo(datosLibros.lenguaje().get(0).toUpperCase());
-        this.cantidadDescargas = Long.valueOf(datosLibros.cantidadDescargas());
+        this.idiomas = datosLibros.idiomas().get(0);
+        this.cantidadDescargas = Integer.valueOf(datosLibros.cantidadDescargas());
 
     }
 
@@ -52,30 +52,29 @@ public class Libro {
         this.autor = autor;
     }
 
-    public Lenguaje getLenguaje() {
-        return lenguaje;
+    public String getIdiomas() {
+        return idiomas;
     }
 
-    public void setLenguaje(Lenguaje lenguaje) {
-        this.lenguaje = lenguaje;
+    public void setIdiomas(String idiomas) {
+        this.idiomas = idiomas;
     }
 
-    public Long getCantidadDescargas() {
+    public Integer getCantidadDescargas() {
         return cantidadDescargas;
     }
 
-    public void setCantidadDescargas(Long cantidadDescargas) {
+    public void setCantidadDescargas(Integer cantidadDescargas) {
         this.cantidadDescargas = cantidadDescargas;
     }
 
     @Override
     public String toString() {
-        return "Libro{" +
-                "id=" + id +
-                ", titulo='" + titulo + '\'' +
-                ", autor=" + autor +
-                ", lenguaje=" + lenguaje +
-                ", cantidadDescargas=" + cantidadDescargas +
-                '}';
+        return "******************************************************************" + "\n" +
+                "   Titulo: " + titulo  +  "\n" +
+                "   Nombre autor: " + autor  + "\n" +
+                "   Idioma:  " + idiomas + "\n" +
+                "   Numero descargas:  " + cantidadDescargas + "\n" +
+                "******************************************************************";
     }
 }

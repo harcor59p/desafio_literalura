@@ -1,13 +1,20 @@
 package com.aluracursos.desafio_literalura.principal;
 
+import com.aluracursos.desafio_literalura.model.Autor;
+import com.aluracursos.desafio_literalura.model.DatosLibros;
+import com.aluracursos.desafio_literalura.model.Libro;
+import com.aluracursos.desafio_literalura.repository.LibroRepository;
 import com.aluracursos.desafio_literalura.service.ConsumoAPI;
+import com.aluracursos.desafio_literalura.service.ConvertirDatos;
 
 import java.util.Scanner;
 
 public class Principal {
     private Scanner teclado = new Scanner(System.in) ;
     private ConsumoAPI consumoAPI = new ConsumoAPI();
-    private final String URL_BASE = "https://gutendex.com/books/" ;
+    private final String URL_BASE = "https://gutendex.com/books/?search=" ;
+    private ConvertirDatos conversor = new ConvertirDatos() ;
+    private LibroRepository libroRepository ;
 
 
     public void muestraElMenu(){
@@ -27,10 +34,10 @@ public class Principal {
             opcion = teclado.nextInt();
             teclado.nextLine();
 
-//            switch (opcion){
-//                case 1:
-//                    buscarSerieWeb();
-//                    break;
+            switch (opcion){
+                case 1:
+                    buscarLibro();
+                    break;
 //                case 2:
 //                    buscarEpisodioPorSeerie();
 //                    break;
@@ -43,14 +50,42 @@ public class Principal {
 //                case 5:
 //                    buscarTop5Series();
 //                    break;
-//                case 0:
-//                    System.out.println("Cerrando la aplicación...");
-//                    break;
-//                default:
-//                    System.out.println("Opción invalida");
-//            }
+                case 0:
+                    System.out.println("Cerrando la aplicación...");
+                    break;
+                default:
+                    System.out.println("Opción invalida");
+            }
 
         }
 
+
     }
+    private DatosLibros getDatosLibros() {
+        System.out.println("Por favor escribe el nombre del libro que deseas buscar: ");
+        // Trae la información basica del libro indicado
+        var nombreLibro = teclado.nextLine();
+        var json = consumoAPI.obtenerDatos(URL_BASE  + nombreLibro.replace(" " , "+")) ;
+        System.out.println(json);
+        DatosLibros datos = conversor.obtenerDatos(json , DatosLibros.class);
+        return datos;
+    }
+
+    private Libro crearLibro(DatosLibros datosLibro, Autor autor) {
+        Libro libro = new Libro(datosLibro, autor);
+        return libroRepository.save(libro);
+    }
+
+    private void buscarLibro(){
+        DatosLibros datos = getDatosLibros();
+        Libro libro = new Libro(datos) ;
+        libroRepository.save(libro);
+        System.out.println(datos);
+    }
+
+
+
 }
+
+
+

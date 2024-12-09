@@ -11,22 +11,14 @@ import java.util.List;
 public record DatosLibros(
         @JsonAlias("title")
         String titulo ,
-        @JsonAlias("languages")
-        String idioma ,
         @JsonAlias("authors")
         List<DatosAutores> autor,
         @JsonAlias("languages")
-        List<String> lenguaje ,
+        List<String> idiomas,
         @JsonAlias("download_count")
         Integer cantidadDescargas
 ) {
-        @Override
-        public List<DatosAutores> autor() {
-                return autor == null ? Collections.emptyList() : autor;
-        }
 
-        @Override
-        public List<String> lenguaje() {
-                return lenguaje == null ? Collections.emptyList() : lenguaje;
-        }
+
+
 }
