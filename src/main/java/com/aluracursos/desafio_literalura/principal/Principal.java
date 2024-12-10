@@ -1,20 +1,22 @@
 package com.aluracursos.desafio_literalura.principal;
 
-import com.aluracursos.desafio_literalura.model.Autor;
-import com.aluracursos.desafio_literalura.model.DatosLibros;
-import com.aluracursos.desafio_literalura.model.Libro;
+import com.aluracursos.desafio_literalura.model.*;
+import com.aluracursos.desafio_literalura.repository.AutorRepository;
 import com.aluracursos.desafio_literalura.repository.LibroRepository;
 import com.aluracursos.desafio_literalura.service.ConsumoAPI;
 import com.aluracursos.desafio_literalura.service.ConvertirDatos;
 
 import java.util.Scanner;
 
+import static com.aluracursos.desafio_literalura.repository.AutorRepository.*;
+
 public class Principal {
     private Scanner teclado = new Scanner(System.in) ;
     private ConsumoAPI consumoAPI = new ConsumoAPI();
     private final String URL_BASE = "https://gutendex.com/books/?search=" ;
     private ConvertirDatos conversor = new ConvertirDatos() ;
-    private LibroRepository libroRepository ;
+    private AutorRepository autorRepositorio;
+    private LibroRepository libroRepositorio;
 
 
     public void muestraElMenu(){
@@ -36,7 +38,7 @@ public class Principal {
 
             switch (opcion){
                 case 1:
-                    buscarLibro();
+                    buscarLibroPorTitulo();
                     break;
 //                case 2:
 //                    buscarEpisodioPorSeerie();
@@ -61,26 +63,47 @@ public class Principal {
 
 
     }
-    private DatosLibros getDatosLibros() {
+    private ConsultaLibros getDatosLibros() {
         System.out.println("Por favor escribe el nombre del libro que deseas buscar: ");
         // Trae la información basica del libro indicado
         var nombreLibro = teclado.nextLine();
         var json = consumoAPI.obtenerDatos(URL_BASE  + nombreLibro.replace(" " , "+")) ;
         System.out.println(json);
-        DatosLibros datos = conversor.obtenerDatos(json , DatosLibros.class);
+        ConsultaLibros datos = conversor.obtenerDatos(json , ConsultaLibros.class);
         return datos;
     }
 
     private Libro crearLibro(DatosLibros datosLibro, Autor autor) {
         Libro libro = new Libro(datosLibro, autor);
-        return libroRepository.save(libro);
+        return libroRepositorio.save(libro);
     }
 
-    private void buscarLibro(){
-        DatosLibros datos = getDatosLibros();
-        Libro libro = new Libro(datos) ;
-        libroRepository.save(libro);
-        System.out.println(datos);
+    private void buscarLibroPorTitulo() {
+        ConsultaLibros datos = getDatosLibros();
+        if (!datos.resultados().isEmpty()) {
+            DatosLibros datosLibro = datos.resultados().get(0);
+            DatosAutores datosAutor = datosLibro.autor().get(0);
+            Libro libro = null;
+            Libro libroDb = libroRepositorio.findByTitulo(datosLibro.titulo());
+            if (libroDb != null) {
+                System.out.println(libroDb );
+            } else {
+                Autor autorDb = autorRepositorio.findByNombreIgnoreCase(datosLibro.autor().get(0).autor());
+                if (autorDb == null) {
+                    Autor autor = new Autor(datosAutor);
+                    autor = autorRepositorio.save(autor);
+                    libro = crearLibro(datosLibro, autor);
+                    System.out.println(libro);
+                } else {
+                    libro = crearLibro(datosLibro, autorDb);
+                    System.out.println(libro);
+                }
+            }
+        } else {
+            System.out.println("""
+            El libro indicado no existe..............
+        """);
+        }
     }
 
 

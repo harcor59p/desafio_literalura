@@ -23,7 +23,8 @@ public class Autor {
     private List<Libro> libros = new ArrayList<>();
 
 
-    public Autor(){}
+    public Autor() {
+    }
 
     public Autor(DatosAutores datosAutores) {
         //this.id = autorRecord.id();

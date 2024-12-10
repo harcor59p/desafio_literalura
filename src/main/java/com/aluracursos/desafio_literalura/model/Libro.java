@@ -17,9 +17,11 @@ public class Libro {
     @ManyToOne()
     @JoinColumn( name = "autor_id", nullable = false)
     private Autor autor;
-    @Enumerated(EnumType.STRING)
     private String idiomas;
     private Integer cantidadDescargas;
+
+    public Libro() {
+    }
 
     public Libro(DatosLibros datosLibros) {
         this.titulo = datosLibros.titulo();
@@ -27,6 +29,10 @@ public class Libro {
         this.cantidadDescargas = Integer.valueOf(datosLibros.cantidadDescargas());
 
     }
+
+    public Libro(DatosLibros datosLibro, Autor autor) {
+    }
+
 
     public Long getId() {
         return id;
