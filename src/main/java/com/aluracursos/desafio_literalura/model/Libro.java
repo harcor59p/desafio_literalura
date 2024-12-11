@@ -14,48 +14,49 @@ public class Libro {
     private Long id ;
     @Column(unique = true)
     private String titulo ;
-    @ManyToOne()
-    @JoinColumn( name = "autor_id", nullable = false)
+    private String nombreAutor;
+    @ManyToOne
     private Autor autor;
     private String idiomas;
-    private Integer cantidadDescargas;
+    private int cantidadDescargas;
 
     public Libro() {
     }
 
-    public Libro(DatosLibros datosLibros) {
-        this.titulo = datosLibros.titulo();
-        this.idiomas = datosLibros.idiomas().get(0);
-        this.cantidadDescargas = Integer.valueOf(datosLibros.cantidadDescargas());
 
-    }
 
     public Libro(DatosLibros datosLibro, Autor autor) {
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public Autor getAutor() {
-        return autor;
-    }
-
-    public void setAutor(Autor autor) {
+        this.titulo = datosLibro.titulo();
+        this.nombreAutor = autor.getNombre() ;
         this.autor = autor;
+        this.idiomas = datosLibro.idiomas().get(0);
+        this.cantidadDescargas = datosLibro.cantidadDescargas();
+
+    }
+
+    @Override
+    public String toString() {
+        return "******************************************************************" + "\n" +
+                "   Titulo: " + titulo  +  "\n" +
+                "   Nombre autor: " + nombreAutor  + "\n" +
+                "   Idioma:  " + idiomas + "\n" +
+                "   Numero descargas:  " + cantidadDescargas + "\n" +
+                "******************************************************************";
+    }
+
+    public String getNombreAutor() {
+        return nombreAutor;
+    }
+
+    public void setNombreAutor(String nombreAutor) {
+        this.nombreAutor = nombreAutor;
+    }
+    public int getCantidadDescargas() {
+        return cantidadDescargas;
+    }
+
+    public void setCantidadDescargas(int cantidadDescargas) {
+        this.cantidadDescargas = cantidadDescargas;
     }
 
     public String getIdiomas() {
@@ -66,21 +67,27 @@ public class Libro {
         this.idiomas = idiomas;
     }
 
-    public Integer getCantidadDescargas() {
-        return cantidadDescargas;
+    public Autor getAutor() {
+        return autor;
     }
 
-    public void setCantidadDescargas(Integer cantidadDescargas) {
-        this.cantidadDescargas = cantidadDescargas;
+    public void setAutor(Autor autor) {
+        this.autor = autor;
     }
 
-    @Override
-    public String toString() {
-        return "******************************************************************" + "\n" +
-                "   Titulo: " + titulo  +  "\n" +
-                "   Nombre autor: " + autor  + "\n" +
-                "   Idioma:  " + idiomas + "\n" +
-                "   Numero descargas:  " + cantidadDescargas + "\n" +
-                "******************************************************************";
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

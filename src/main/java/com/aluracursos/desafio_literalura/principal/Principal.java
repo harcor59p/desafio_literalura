@@ -6,6 +6,8 @@ import com.aluracursos.desafio_literalura.repository.LibroRepository;
 import com.aluracursos.desafio_literalura.service.ConsumoAPI;
 import com.aluracursos.desafio_literalura.service.ConvertirDatos;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static com.aluracursos.desafio_literalura.repository.AutorRepository.*;
@@ -15,8 +17,17 @@ public class Principal {
     private ConsumoAPI consumoAPI = new ConsumoAPI();
     private final String URL_BASE = "https://gutendex.com/books/?search=" ;
     private ConvertirDatos conversor = new ConvertirDatos() ;
+    private List<Libro> librosRegistrados = new ArrayList<>();
+    private List<Autor> autoresRegistrados = new ArrayList<>();
+    private ConsultaLibros datos ;
     private AutorRepository autorRepositorio;
     private LibroRepository libroRepositorio;
+
+
+    public Principal(AutorRepository autorRepositorio, LibroRepository libroRepository) {
+        this.autorRepositorio = autorRepositorio;
+        this.libroRepositorio = libroRepository;
+    }
 
 
     public void muestraElMenu(){
@@ -64,12 +75,9 @@ public class Principal {
 
     }
     private ConsultaLibros getDatosLibros() {
-        System.out.println("Por favor escribe el nombre del libro que deseas buscar: ");
-        // Trae la información basica del libro indicado
         var nombreLibro = teclado.nextLine();
         var json = consumoAPI.obtenerDatos(URL_BASE  + nombreLibro.replace(" " , "+")) ;
-        System.out.println(json);
-        ConsultaLibros datos = conversor.obtenerDatos(json , ConsultaLibros.class);
+        datos = conversor.obtenerDatos(json, ConsultaLibros.class);
         return datos;
     }
 
@@ -79,6 +87,7 @@ public class Principal {
     }
 
     private void buscarLibroPorTitulo() {
+        System.out.println("Por favor escribe el nombre del libro que deseas buscar: ");
         ConsultaLibros datos = getDatosLibros();
         if (!datos.resultados().isEmpty()) {
             DatosLibros datosLibro = datos.resultados().get(0);
@@ -86,9 +95,9 @@ public class Principal {
             Libro libro = null;
             Libro libroDb = libroRepositorio.findByTitulo(datosLibro.titulo());
             if (libroDb != null) {
-                System.out.println(libroDb );
+                System.out.println(libroDb);
             } else {
-                Autor autorDb = autorRepositorio.findByNombreIgnoreCase(datosLibro.autor().get(0).autor());
+                Autor autorDb = autorRepositorio.findByNombreIgnoreCase(datosLibro.autor().get(0).nombre());
                 if (autorDb == null) {
                     Autor autor = new Autor(datosAutor);
                     autor = autorRepositorio.save(autor);
